@@ -2,7 +2,6 @@ package com.cgrdev.petagram.pojo;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.Properties;
 
@@ -15,9 +14,11 @@ import javax.mail.internet.MimeMessage;
 
 public class AsyncMail extends AsyncTask {
 
+    String asunto;
     String mensaje;
 
-    public AsyncMail (String mensaje) {
+    public AsyncMail (String asunto, String mensaje) {
+        this.asunto = asunto;
         this.mensaje = mensaje;
     }
 
@@ -25,10 +26,7 @@ public class AsyncMail extends AsyncTask {
     protected Object doInBackground(Object[] objects) {
         try {
 
-            Log.d("Petagram: ", "Entrada a doInBackground.");
-
             // Creación y configuración clase Session
-
             Properties props = new Properties();
 
             // Nombre del host del correo, smtp.gmail.com
@@ -41,7 +39,9 @@ public class AsyncMail extends AsyncTask {
             props.setProperty("mail.smtp.port", "587");
 
             // Nombre del usuario
-            props.setProperty("mail.smtp.user", "garciacarlos78@gmail.com");
+            // TODO indicar aquí el nombre de usuario de la cuenta de correo desde la que se enviará el correo. Dirección de correo de gmail.
+            props.setProperty("mail.smtp.user", "usuario@gmail.com");
+
 
             // Se requiere usuario y password para conectar
             props.setProperty("mail.smtp.auth", "true");
@@ -59,17 +59,17 @@ public class AsyncMail extends AsyncTask {
             MimeMessage message = new MimeMessage(session);
 
             // Indicamos el remitente del correo (FROM)
-            // TODO indicar remitente que el usuario haya indicado en la app
+            // Se comenta porque Gmail no utiliza este from en el encabezado, lo cambia por el propio
             // message.setFrom(new InternetAddress("carles.garcia4@hotmail.com"));
 
             // Destinatario
+            // El destinatario es el desarrollador, la opción se utiliza para enviar mensaje al desarrollador
             message.addRecipient(Message.RecipientType.TO, new InternetAddress("carles.garcia4@hotmail.com"));
 
             // Subject
-            message.setSubject("PetaTest - Mensaje de usuario <Nombre> <direcion@dominio.tal>ls" +
-                    "");
+            message.setSubject(this.asunto);
 
-            // Texto
+            // Cuerpo del mensaje
             message.setText(this.mensaje);
             // Fin construcción mensaje
 
@@ -79,25 +79,22 @@ public class AsyncMail extends AsyncTask {
             Transport t = session.getTransport("smtp");
 
             // Establecemos conexión
-            // TODO Ojo aquí eliminar el password
-            t.connect("usuario@dominio", "password");
+            // TODO Introducir aquí usuario y password de Gmail
+            t.connect("username@gmail.com", "password");
 
             // Enviamos mensaje
             t.sendMessage(message, message.getAllRecipients());
 
             // Cerramos la conexión
             t.close();
-
             // Fin envío mensaje
 
-            Log.d("Petagram: ", "Fin doInBackground.");
-
-
         } catch (AuthenticationFailedException auth) {
-            Log.e("Petagram: ", "Usuario o password incorrecto: " + auth.getMessage());
+            // TODO Mostrar por pantalla del móvil que ha habido error de user/password
+            Log.e("Petagram: ", "Error de autenticación: " + auth.getMessage());
         } catch (Exception e) {
-            Log.e("Petagram: ", "Error al enviar el mensaje.");
-            e.printStackTrace();
+            // TODO Mostrar en terminal error de envío
+            Log.e("Petagram: ", "Error al enviar el mensaje: " + e.getMessage());
         }
         return null;
     }

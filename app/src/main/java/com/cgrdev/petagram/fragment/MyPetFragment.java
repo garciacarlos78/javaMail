@@ -4,22 +4,17 @@ package com.cgrdev.petagram.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.cgrdev.petagram.R;
-import com.cgrdev.petagram.activity.MainActivity;
-import com.cgrdev.petagram.adapter.MascotaAdaptador;
 import com.cgrdev.petagram.adapter.MiMascotaAdapter;
-import com.cgrdev.petagram.pojo.Mascota;
 import com.cgrdev.petagram.pojo.RatedPicture;
-import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
 
 
 /**
