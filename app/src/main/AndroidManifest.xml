@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activity.Contacto"
+            android:name=".activity.AcercaDe"
             android:parentActivityName=".activity.MainActivity">
 
             <!-- Soporte para versiones 4.0 o inferior -->
@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".activity.AcercaDe"
+            android:name=".activity.Contacto"
             android:parentActivityName=".activity.MainActivity">
 
             <!-- Soporte para versiones 4.0 o inferior -->

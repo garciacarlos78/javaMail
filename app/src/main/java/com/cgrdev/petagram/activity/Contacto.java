@@ -1,5 +1,6 @@
 package com.cgrdev.petagram.activity;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,19 +11,13 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.cgrdev.petagram.R;
-import com.cgrdev.petagram.pojo.AsyncMail;
-import com.cgrdev.petagram.pojo.SendMail;
 
-import java.util.Date;
 import java.util.Properties;
 
-import javax.mail.Address;
+import javax.mail.AuthenticationFailedException;
 import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -54,165 +49,120 @@ public class Contacto extends AppCompatActivity {
             public void onClick(View v) {
 
                 // Comprobamos que no haya ningún campo vacío
-                if (!etContactoNombre.getText().toString().isEmpty() && !etContactoCorreo.getText().toString().isEmpty() && !etContactoComentario.getText().toString().isEmpty()) {
-                    // Creamos el texto del asunto del correo
-                    StringBuilder asunto = new StringBuilder("Petagram - Mensaje de usuario " + etContactoNombre.getText().toString() + " <" + etContactoCorreo.getText().toString() + ">");
-                    try {
-                        enviaMensaje(asunto.toString(), etContactoComentario.getText().toString());
-                    } catch (MessagingException e) {
-                        e.printStackTrace();
-                    }
-                }
+                if (!etContactoNombre.getText().toString().isEmpty() && !etContactoCorreo.getText().toString().isEmpty() &&
+                        !etContactoComentario.getText().toString().isEmpty()) {
 
+                    // Creamos el texto del asunto del correo
+                    StringBuilder asunto = new StringBuilder("Petagram - Mensaje de usuario " + etContactoNombre.getText().toString() +
+                            " <" + etContactoCorreo.getText().toString() + ">");
+
+                    // Llamamos a la clase interna EnviaMailAsincrono, encargada de enviar el correo en segundo plano
+                    new EnviaMailAsincrono().execute(new String[]{asunto.toString(), etContactoComentario.getText().toString()});
+
+                } else {
+                    // No se puede enviar porque no están todos los campos introducidos
+                    Toast.makeText(Contacto.this, "Rellena todos los campos", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    public void enviaMensaje(String asunto, String mensaje) throws MessagingException {
 
-        new AsyncMail(asunto, mensaje).execute();
+    // Clase para enviar el mensaje con JavaMail como tarea en segundo plano
+    private class EnviaMailAsincrono extends AsyncTask<String[], Void, String> {
 
-/*
-        // Creación y configuración clase Session
+        @Override
+        protected void onPreExecute() {
+            // Informamos al usuario que se está enviando el mensaje
+            Toast.makeText(Contacto.this, "Enviando mensaje...", Toast.LENGTH_LONG).show();
+        }
 
-        Properties props = new Properties();
+        @Override
+        protected String doInBackground(String[]... strings) {
 
-        // Nombre del host del correo, smtp.gmail.com
-        props.setProperty("mail.smtp.host", "smtp.gmail.com");
+            String asunto = strings[0][0];
+            String mensaje = strings[0][1];
 
-        // TLS si está disponible
-        props.setProperty("mail.smtp.starttls.enable", "true");
+            try {
 
-        // Puerto de gmail para envío de correos
-        props.setProperty("mail.smtp.port", "587");
+                // Creación y configuración clase Session
+                Properties props = new Properties();
 
-        // Nombre del usuario
-        props.setProperty("mail.smtp.user", "garciacarlos78@gmail.com");
+                // Nombre del host del correo, smtp.gmail.com
+                props.setProperty("mail.smtp.host", "smtp.gmail.com");
 
-        // Se requiere usuario y password para conectar
-        props.setProperty("mail.smtp.auth", "true");
+                // TLS si está disponible
+                props.setProperty("mail.smtp.starttls.enable", "true");
 
-        // Obtenemos la instancia de Session con este Properties
-        Session session = Session.getDefaultInstance(props);
+                // Puerto de gmail para envío de correos
+                props.setProperty("mail.smtp.port", "587");
 
-        // Información extra, se puede comentar una vez funcione
-        session.setDebug(true);
-        // Fin creación y configuración clase Session
-
-        // Construcción mensaje
-
-        // Instanciamos clase MimeMessage para pasar datos
-        MimeMessage message = new MimeMessage(session);
-
-        // Indicamos el remitente del correo (FROM)
-        // TODO indicar remitente que el usuario haya indicado en la app
-        message.setFrom(new InternetAddress("carles.garcia4@hotmail.com"));
-
-        // Destinatario
-        message.addRecipient(Message.RecipientType.TO,  new InternetAddress("garciacarlos78@gmail.com"));
-
-        // Subject
-        message.setSubject("PetaTest");
-
-        // Texto
-        message.setText("Mensaje con Java Mail" + "de peta peta." + "poque si");
-        // Fin construcción mensaje
-
-        // Envío mensaje
-
-        // Obtenemos instancia de clase Transport con protocolo smtp
-        Transport t = session.getTransport("smtp");
-
-        // Establecemos conexión
-        // TODO Ojo aquí eliminar el password
-        t.connect("garciacarlos78@gmail.com", "MU4461tk");
-
-        // Enviamos mensaje
-        t.sendMessage(message, message.getAllRecipients());
-
-        // Cerramos la conexión
-        t.close();
-
-        // Fin envío mensaje
-*/
+                // Nombre del usuario
+                // TODO indicar aquí el nombre de usuario de la cuenta de correo desde la que se enviará el correo. Dirección de correo de gmail.
+                props.setProperty("mail.smtp.user", "usuario@gmail.com");
 
 
-        // new SendMail().execute(null, null, null);
+                // Se requiere usuario y password para conectar
+                props.setProperty("mail.smtp.auth", "true");
 
-//        String to = "cuenta.chorra@hotmail.com";
-//        String from = "cuenta.chorra@hotmail.com";
-//        String host = "smtp.office365.com";
-//
-//        // create some properties and get the default Session
-//        Properties props = new Properties();
-//        props.put("mail.smtp.host", host);
-//
-//        Session session = Session.getInstance(props, null);
-//
-//        try {
-//            // create a message
-//            MimeMessage msg = new MimeMessage(session);
-//            msg.setFrom(new InternetAddress(from));
-//            InternetAddress[] address = {new InternetAddress(to)};
-//            msg.setRecipients(Message.RecipientType.TO, address);
-//            msg.setSubject("JavaMail APIs Test");
-//            msg.setSentDate(new Date());
-//            // If the desired charset is known, you can use
-//            // setText(text, charset)
-//            msg.setText("Texto del mensaje");
-//
-//            Transport.send(msg);
-//        } catch (MessagingException mex) {
-//            Log.d("Mascotas: ", "--Exception handling in msgsendsample.java");
-//
-//            mex.printStackTrace();
-//            Exception ex = mex;
-//            do {
-//                if (ex instanceof SendFailedException) {
-//                    SendFailedException sfex = (SendFailedException)ex;
-//                    Address[] invalid = sfex.getInvalidAddresses();
-//                    if (invalid != null) {
-//                        Log.d("Mascotas: ", "--Exception handling in msgsendsample.java");
-//                        for (int i = 0; i < invalid.length; i++) {
-//                            Log.d("Mascotas: ", "--Exception handling in msgsendsample.java");
-//                            Log.d("Mascotas: ", "         " + invalid[i]);
-//                            }
-//                    }
-//                    Address[] validUnsent = sfex.getValidUnsentAddresses();
-//                    if (validUnsent != null) {
-//                        Log.d("Mascotas: ", "    ** ValidUnsent Addresses");
-//                        for (int i = 0; i < validUnsent.length; i++)
-//                            Log.d("Mascotas: ", "         "+validUnsent[i]);
-//                    }
-//                    Address[] validSent = sfex.getValidSentAddresses();
-//                    if (validSent != null) {
-//                        Log.d("Mascotas: ", "    ** ValidSent Addresses");
-//                        for (int i = 0; i < validSent.length; i++)
-//                            Log.d("Mascotas: ", "         "+validSent[i]);
-//                    }
-//                }
-//                if (ex instanceof MessagingException)
-//                    ex = ((MessagingException)ex).getNextException();
-//                else
-//                    ex = null;
-//            } while (ex != null);
-//        }
+                // Obtenemos la instancia de Session con este Properties
+                Session session = Session.getDefaultInstance(props);
 
-//        Properties props = new Properties();
-//        props.put("mail.smtp.host", "smtp.office365.com");
-//        Session session = Session.getInstance(props, null);
-//
-//        try {
-//            MimeMessage msg = new MimeMessage(session);
-//            msg.setFrom("cuenta.chorra@hotmail.com");
-//            msg.setRecipients(Message.RecipientType.TO,
-//                    "cuenta.chorra@hotmail.com");
-//            msg.setSubject("JavaMail hello world example");
-//            msg.setSentDate(new Date());
-//            msg.setText("Hello, world!\n");
-//            Transport.send(msg, "cuenta.chorra@hotmail.com", "");
-//        } catch (MessagingException mex) {
-//            System.out.println("send failed, exception: " + mex);
-//        }
+                // Información extra, se puede comentar una vez funcione
+                // session.setDebug(true);
+                // Fin creación y configuración clase Session
+
+                // Construcción mensaje
+
+                // Instanciamos clase MimeMessage para pasar datos
+                MimeMessage message = new MimeMessage(session);
+
+                // Indicamos el remitente del correo (FROM)
+                // Se comenta porque Gmail no utiliza este from en el encabezado, lo cambia por el de la cuenta utilizada para conectar con el servidor
+                // message.setFrom(new InternetAddress("carles.garcia4@hotmail.com"));
+
+                // Destinatario
+                // El destinatario es el desarrollador, la opción se utiliza para enviar mensaje al desarrollador
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress("carles.garcia4@hotmail.com"));
+
+                // Subject
+                message.setSubject(asunto);
+
+                // Cuerpo del mensaje
+                message.setText(mensaje);
+                // Fin construcción mensaje
+
+                // Envío mensaje
+
+                // Obtenemos instancia de clase Transport con protocolo smtp
+                Transport t = session.getTransport("smtp");
+
+                // Establecemos conexión
+                // TODO Introducir aquí usuario y password de Gmail
+                t.connect("usuario@gmail.com", "password");
+
+                // Enviamos mensaje
+                t.sendMessage(message, message.getAllRecipients());
+
+                // Cerramos la conexión
+                t.close();
+                // Fin envío mensaje
+
+            } catch (AuthenticationFailedException auth) {
+                Log.e("Petagram: ", "Error de autenticación: " + auth.getMessage());
+                return "Error de autenticación";
+
+            } catch (Exception e) {
+                Log.e("Petagram: ", "Error al enviar el mensaje: " + e.getMessage());
+                return "Mensaje no enviado, error inesperado";
+            }
+
+            return "Mensaje enviado";
+        }
+
+        @Override
+        protected void onPostExecute(String resultado) {
+            Toast.makeText(Contacto.this, resultado, Toast.LENGTH_LONG).show();
+        }
     }
 }
