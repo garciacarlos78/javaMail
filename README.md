@@ -8,6 +8,10 @@
     
                     t.connect("usuario@gmail.com", "password");
     
+   También se debe modificar la línea 102:
+   
+                    props.setProperty("mail.smtp.user", "usuario@gmail.com");
+  
    Si la App estuviera en producción no sería necesario, se enviaría desde la cuenta del desarrollador directamente.
    No se puede hacer así por tener que compartir el código fuente, tendría que exponer mi usuario y contraseña.
    
