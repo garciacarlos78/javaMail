@@ -1,6 +1,6 @@
-#Consideraciones#
+# Consideraciones
 
-##Contacto##
+## Contacto
   
    Se asume que la finalidad es contactar con el desarrollador de la app, y la dirección que se introduce es la de respuesta.
    Para autenticarse con el servidor, se debe introducir una dirección de correo válida de Gmail y su contraseña en la siguiente
@@ -31,7 +31,7 @@
     
    El contenido del correo es el indicado en el campo correspondiente de la app.
    
-##CircularImageView##
+## CircularImageView
 
 Se utiliza la siguiente librería, en lugar de la última versión, ya que la última versión requiere de androidx:
 
