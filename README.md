@@ -1,3 +1,15 @@
+# Descripción
+Entrega semana 4 curso Desarrollo de aplicaciones con Android (Coursera).
+
+https://www.coursera.org/learn/desarrollo-de-aplicaciones
+
+# Objetivo
+Crear app estilo Instagram con las siguientes características:
+  - Utilización de menú de opciones, mostrando las opciones "Contacto" y "Acerca de".
+  - Utilización de librería javaMail.
+    - Desde "Contacto" se accederá a activity donde se mostrará formulario solicitando nombre, correo y mensaje, utilizando EditText de Material Design).
+    - Esta activity incorpora botón "Enviar Comentario", que enviará correo al desarrollador, con nombre y correo del formulario en el asunto y mensaje del formulario en el cuerpo.
+
 # Consideraciones
 
 ## Contacto
