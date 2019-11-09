@@ -5,17 +5,25 @@ https://www.coursera.org/learn/desarrollo-de-aplicaciones
 
 # Objetivo
 Crear app estilo Instagram con las siguientes características:
-  - Utilización de menú de opciones, mostrando las opciones "Contacto" y "Acerca de".
+  - Utilización de menú de opciones, mostrando las opciones "Contacto" y "Acerca de", las cuales abrirán activity para poder enviar correo al desarrollador, y activity con información del mismo, respectivamente.
   - Utilización de librería javaMail.
-    - Desde "Contacto" se accederá a activity donde se mostrará formulario solicitando nombre, correo y mensaje, utilizando EditText de Material Design).
+    - Desde "Contacto" se accederá a activity donde se mostrará formulario solicitando nombre, correo y mensaje, utilizando EditText de Material Design.
     - Esta activity incorpora botón "Enviar Comentario", que enviará correo al desarrollador, con nombre y correo del formulario en el asunto y mensaje del formulario en el cuerpo.
+  - Utilización Fragments y ViewPager.
+    - Se incorporará un ViewPager, con ocultación automática al hacer scroll, que permitirá alternar entre 2 fragments:
+      - Fragment 1: ReyclerView con fotos de las mascotas (CardView), con su correspondiente botón "like" (hueso blanco), y su contador de likes (hueso amarillo).
+      - Fragment 2: este fragment contiene la información de la mascota propia. Incorpora su foto de perfil, redondeada con librería https://github.com/lopspower/CircularImageView, y bajo la foto de perfil un RecyclerView en forma de Grid con todas sus fotos subidas. Cada foto incorporará número de likes recibidos, representado por icono hueso amarillo. Todos estos datos (fotos y likes), son dummy.
+      
+     
+    
 
 # Consideraciones
 
 ## Contacto
   
-Se asume que la finalidad es contactar con el desarrollador de la app, y la dirección que se introduce es la de respuesta.
-Para autenticarse con el servidor, se debe introducir una dirección de correo válida de Gmail y su contraseña en la siguiente
+Se asume que la finalidad es contactar con el desarrollador de la app, y la dirección de correo que se introduce en el formulario es la de respuesta.
+Como el código fuente es público, se han dejado sin introducir dirección de correo y contraseña desde la que se enviará el correo.
+Para que el envío del correo funcione hay que autenticarse con el servidor. Para esto se debe introducir una dirección de correo válida de Gmail y su contraseña en la siguiente
 línea de Contacto.java (línea 142):
     
                     t.connect("usuario@gmail.com", "password");
@@ -24,9 +32,6 @@ También se debe modificar la línea 102:
    
                     props.setProperty("mail.smtp.user", "usuario@gmail.com");
   
-Si la App estuviera en producción no sería necesario, se enviaría desde la cuenta del desarrollador directamente.
-No se puede hacer así por tener que compartir el código fuente, tendría que exponer mi usuario y contraseña.
-   
 Otra opción sería solicitar usuario y contraseña en la app al usuario, pero no se hace por seguridad: podría enviarme esos datos por correo a mi dirección de correo.
    
 La siguiente instrucción debería sustituir el "from" del header del correo por el indicado, con lo que el desarrollador podría responder directamente al correo.
@@ -53,3 +58,5 @@ Se utiliza la siguiente librería, en lugar de la última versión, ya que la ú
                     implementation 'com.mikhaellopez:circularimageview:3.0.2'
 
 Con esta versión no es necesario.
+
+# Capturas de pantalla
