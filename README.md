@@ -62,13 +62,10 @@ Se utiliza la siguiente librería, en lugar de la última versión, ya que la ú
 Con esta versión no es necesario.
 
 # Capturas de pantalla
-## Pantalla inicial - Lista de mascotas
+## Pantalla inicial: Lista de mascotas - Mascota propia - Menu
 ![Main screen - pet list](Pantallazos/main_activity.png)
-## Pantalla inicial - Mascota propia
 ![Main screen - own pet](Pantallazos/own_pet_fragment.png)
-## Menu
 ![Menu](Pantallazos/menu.png)
-## Contact
+## Contact - About
 ![Contact](Pantallazos/contact.png)
-## About
 ![About](Pantallazos/about.png)
